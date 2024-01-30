@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const https = require("https");
+const http = require("http");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -16,7 +17,8 @@ const options = {
 };
 
 // Create an HTTPS server
-const server = https.createServer(options);
+const serverHttps = https.createServer(options);
+const server = http.createServer(app);
 const appHttps = https.createServer(options, app);
 
 // Create a new WebSocket server
@@ -134,10 +136,21 @@ app.post("/event", function (req, res) {
 });
 
 // Start the Express app
-appHttps.listen(20001, function () {
+// appHttps.listen(20001, function () {
+//   console.log("Express app listening on port 20001");
+// });
+
+// start http server
+app.listen(20001, function () {
   console.log("Express app listening on port 20001");
 });
 
+// Start the HTTPS server
+// serverHttps.listen(20000, function () {
+//   console.log("WSS server listening on port 20000");
+// });
+
+// start ws server
 server.listen(20000, function () {
-  console.log("WSS server listening on port 20000");
+  console.log("WS server listening on port 20000");
 });
